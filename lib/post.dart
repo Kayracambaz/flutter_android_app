@@ -1,17 +1,22 @@
 class Post {
   String body;
   String author;
-  int likes = 0;
-  bool userLiked = false;
+  int likes;
+  bool userLiked;
 
-  Post(this.body, this.author);
+  Post(this.body, this.author, {this.likes = 0, this.userLiked = false});
 
-  void likePost() {
-    userLiked = !userLiked;
+  void toggleLike() {
     if (userLiked) {
-      likes += 1;
+      if (likes > 0) likes -= 1;
     } else {
-      likes -= 1;
+      likes += 1;
     }
+    userLiked = !userLiked;
+  }
+
+  @override
+  String toString() {
+    return '$author: "$body" (${likes} likes)';
   }
 }

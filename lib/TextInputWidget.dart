@@ -1,42 +1,50 @@
 import 'package:flutter/material.dart';
 
 class TextInputWidget extends StatefulWidget {
-  final Function(String) callback;
+  final Function(String) onSubmitted;
 
-  const TextInputWidget(this.callback, {super.key});
+  const TextInputWidget(this.onSubmitted, {super.key});
 
   @override
   State<TextInputWidget> createState() => _TextInputWidgetState();
 }
 
 class _TextInputWidgetState extends State<TextInputWidget> {
-  final controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
 
   @override
   void dispose() {
-    controller.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
-  void click() {
-    widget.callback(controller.text);
+  void _handleSend() {
+    final text = _controller.text.trim();
+    if (text.isEmpty) return;
+
+    widget.onSubmitted(text);
     FocusScope.of(context).unfocus();
-    controller.clear();
+    _controller.clear();
   }
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        prefixIcon: const Icon(Icons.message),
-        labelText: "Type a message:",
-        suffixIcon: IconButton(
-          icon: const Icon(Icons.send),
-          splashColor: Colors.blue,
-          tooltip: "Post message",
-          onPressed: click,
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: TextField(
+        controller: _controller,
+        decoration: InputDecoration(
+          prefixIcon: const Icon(Icons.message),
+          labelText: "Type a message...",
+          suffixIcon: IconButton(
+            icon: const Icon(Icons.send),
+            splashColor: Colors.blue,
+            tooltip: "Send message",
+            onPressed: _handleSend,
+          ),
+          border: const OutlineInputBorder(),
         ),
+        onSubmitted: (_) => _handleSend(),
       ),
     );
   }

@@ -1,30 +1,38 @@
 import 'package:flutter/material.dart';
-import 'MyHomePage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'auth.dart';
+import 'MyHomePage.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Hello World!')),
-      body: const Body(),
-    );
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  bool _isSigningIn = false;
+
+  Future<void> _handleSignIn() async {
+    setState(() => _isSigningIn = true);
+
+    final User? user = await signInWithGoogle();
+
+    setState(() => _isSigningIn = false);
+
+    if (user != null) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MyHomePage(user.displayName ?? "Guest"),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("❌ Google sign-in failed")),
+      );
+    }
   }
-}
-
-class Body extends StatefulWidget {
-  const Body({super.key});
-
-  @override
-  State<Body> createState() => _BodyState();
-}
-
-class _BodyState extends State<Body> {
-  late String name;
-  User? user;
 
   @override
   void initState() {
@@ -32,45 +40,32 @@ class _BodyState extends State<Body> {
     signOutGoogle();
   }
 
-  void click() {
-    signInWithGoogle().then((user) {
-      this.user = user;
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => MyHomePage(user?.displayName ?? 'Guest'),
-        ),
-      );
-    });
-  }
-
-  Widget googleLoginButton() {
-    return OutlinedButton(
-      onPressed: click,
-      style: OutlinedButton.styleFrom(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(45)),
-        side: const BorderSide(color: Colors.grey),
-        splashFactory: InkRipple.splashFactory,
-      ),
-      child: const Padding(
-        padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image(image: AssetImage('assets/google_logo.png'), height: 35),
-            Padding(
-                padding: EdgeInsets.only(left: 10),
-                child: Text('Sign in with Google',
-                    style: TextStyle(color: Colors.grey, fontSize: 25))),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Align(alignment: Alignment.center, child: googleLoginButton());
+    return Scaffold(
+      appBar: AppBar(title: const Text("Sign In")),
+      body: Center(
+        child: _isSigningIn
+            ? const CircularProgressIndicator()
+            : OutlinedButton.icon(
+                icon: Image.asset('assets/google_logo.png', height: 30),
+                label: const Text(
+                  'Sign in with Google',
+                  style: TextStyle(fontSize: 18, color: Colors.grey),
+                ),
+                style: OutlinedButton.styleFrom(
+                  side: const BorderSide(color: Colors.grey),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 12,
+                    horizontal: 20,
+                  ),
+                ),
+                onPressed: _handleSignIn,
+              ),
+      ),
+    );
   }
 }
