@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "124630563209",
+    "project_id": "messageapp-c844e",
+    "storage_bucket": "messageapp-c844e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:124630563209:android:4442276e2f0b84c1c98958",
+        "android_client_info": {
+          "package_name": "com.example.flutter_android_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtC1T6XwiBqInckexXp9rRhzmXBITSGVs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
