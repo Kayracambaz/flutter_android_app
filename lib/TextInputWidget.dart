@@ -29,22 +29,36 @@ class _TextInputWidgetState extends State<TextInputWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(12.0),
-      child: TextField(
-        controller: _controller,
-        decoration: InputDecoration(
-          prefixIcon: const Icon(Icons.message),
-          labelText: "Type a message...",
-          suffixIcon: IconButton(
-            icon: const Icon(Icons.send),
-            splashColor: Colors.blue,
-            tooltip: "Send message",
-            onPressed: _handleSend,
-          ),
-          border: const OutlineInputBorder(),
+    return Card(
+      elevation: 6,
+      margin: const EdgeInsets.all(12),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        child: Row(
+          children: [
+            const Icon(Icons.message, color: Colors.teal),
+            const SizedBox(width: 12),
+            Expanded(
+              child: TextField(
+                controller: _controller,
+                decoration: const InputDecoration(
+                  hintText: "Type a message...",
+                  border: InputBorder.none,
+                ),
+                onSubmitted: (_) => _handleSend(),
+              ),
+            ),
+            IconButton(
+              icon: const Icon(Icons.send, color: Colors.teal),
+              splashRadius: 22,
+              tooltip: "Send",
+              onPressed: _handleSend,
+            ),
+          ],
         ),
-        onSubmitted: (_) => _handleSend(),
       ),
     );
   }

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+
 import 'post.dart';
 import 'postList.dart';
 import 'TextInputWidget.dart';
@@ -15,16 +18,67 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<Post> posts = [];
+  final dbRef = FirebaseDatabase.instance.ref().child("posts");
 
-  void addNewPost(String text) {
+  @override
+  void initState() {
+    super.initState();
+    loadPosts();
+  }
+
+  Future<void> loadPosts() async {
+    final snapshot = await dbRef.get();
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+
+    if (snapshot.exists) {
+      final data = snapshot.value as Map<dynamic, dynamic>;
+      final List<Post> loadedPosts = [];
+
+      data.forEach((key, value) {
+        final post = Post.fromJson(value, id: key, currentUid: uid);
+        loadedPosts.add(post);
+      });
+
+      setState(() {
+        posts = loadedPosts;
+      });
+    }
+  }
+
+  Future<void> addNewPost(String text) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    final now = DateTime.now();
+    final newPost = Post(
+      text,
+      widget.name,
+      timestamp: now,
+    );
+    final newPostRef = dbRef.push();
+
+    await newPostRef.set(newPost.toJson());
+
     setState(() {
-      posts.add(Post(text, widget.name));
+      posts.add(Post(
+        text,
+        widget.name,
+        id: newPostRef.key,
+        timestamp: now,
+      ));
     });
   }
 
-  void _handleSignOut() {
-    signOutGoogle();
-    Navigator.pop(context);
+  Future<void> deletePost(String postId) async {
+    await dbRef.child(postId).remove();
+    setState(() {
+      posts.removeWhere((post) => post.id == postId);
+    });
+  }
+
+  Future<void> _handleSignOut() async {
+    await signOutGoogle();
+    Navigator.pushReplacementNamed(context, '/');
   }
 
   @override
@@ -42,7 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Column(
         children: <Widget>[
-          Expanded(child: PostList(posts)),
+          Expanded(child: PostList(posts, onDeletePost: deletePost)),
           TextInputWidget(addNewPost),
         ],
       ),
