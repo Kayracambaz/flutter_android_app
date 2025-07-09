@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_android_app/MyHomePage.dart';
 import 'firebase_options.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'login.dart';
+import 'profile.dart';
 
 final ThemeData myAppTheme = ThemeData(
   useMaterial3: true,
@@ -51,10 +53,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Kayras App',
-      debugShowCheckedModeBanner: false,
-      theme: myAppTheme,
-      home: const LoginPage(),
-    );
+        title: 'Kayras App',
+        debugShowCheckedModeBanner: false,
+        theme: myAppTheme,
+        home: const LoginPage(),
+        routes: {
+          '/home': (context) => MyHomePage("User"),
+          '/profile': (context) => ProfilePage(),
+        });
   }
 }

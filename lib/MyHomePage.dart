@@ -94,6 +94,35 @@ class _MyHomePageState extends State<MyHomePage> {
           )
         ],
       ),
+      drawer: Drawer(
+          child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          DrawerHeader(
+            decoration: BoxDecoration(color: Colors.blue),
+            child: Text(
+              'Menu',
+              style: TextStyle(color: Colors.white, fontSize: 24.0),
+            ),
+          ),
+          ListTile(
+            leading: Icon(Icons.home),
+            title: Text('Home Page'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushReplacementNamed(context, '/home');
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.person),
+            title: Text('Profile'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/profile');
+            },
+          ),
+        ],
+      )),
       body: Column(
         children: <Widget>[
           Expanded(child: PostList(posts, onDeletePost: deletePost)),
