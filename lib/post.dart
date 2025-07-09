@@ -1,7 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-DateTime? timestamp;
-
 class Post {
   String? id;
   String body;
@@ -47,7 +45,7 @@ class Post {
 
   factory Post.fromJson(Map<dynamic, dynamic> json,
       {String? id, String? currentUid}) {
-    Set<String> likedSet = Set<String>.from(json['usersLiked'] ?? []);
+    final likedSet = Set<String>.from(json['usersLiked'] ?? []);
 
     return Post(
       json['body'] ?? '',
@@ -56,7 +54,7 @@ class Post {
       id: id,
       usersLiked: likedSet,
       userLiked: currentUid != null ? likedSet.contains(currentUid) : false,
-      timestamp: json['timestamp'] != null
+      timestamp: (json['timestamp'] != null && json['timestamp'] is String)
           ? DateTime.tryParse(json['timestamp'])
           : null,
     );

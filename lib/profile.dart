@@ -35,7 +35,7 @@ class _ProfilePageState extends State<ProfilePage> {
       final data = snapshot.value as Map;
       nameController.text = data['name'] ?? '';
       bioController.text = data['bio'] ?? '';
-      photoUrl = data['photoUrl'];
+      photoUrl = data['photoUrl'] != '' ? data['photoUrl'] : null;
       setState(() {});
     }
   }
@@ -53,19 +53,27 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _pickImage() async {
-    final picked = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (picked == null) return;
+    try {
+      final picked = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (picked == null) return;
 
-    final file = File(picked.path);
-    final ref = storageRef.child('profile_pictures/${user.uid}.jpg');
-    await ref.putFile(file);
-    final url = await ref.getDownloadURL();
+      final file = File(picked.path);
+      final ref = storageRef.child('profile_pictures/${user.uid}.jpg');
 
-    setState(() {
-      photoUrl = url;
-    });
+      await ref.putFile(file);
+      final url = await ref.getDownloadURL();
 
-    await dbRef.child(user.uid).update({'photoUrl': url});
+      setState(() {
+        photoUrl = url;
+      });
+
+      await dbRef.child(user.uid).update({'photoUrl': url});
+    } catch (e) {
+      print('Photo upload error: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Photo upload failed: $e')),
+      );
+    }
   }
 
   @override
@@ -96,7 +104,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   backgroundImage:
                       photoUrl != null ? NetworkImage(photoUrl!) : null,
                   child: photoUrl == null
-                      ? Icon(Icons.camera_alt, size: 40, color: Colors.white)
+                      ? Icon(Icons.add, size: 50, color: Colors.grey[700])
                       : null,
                 ),
               ),

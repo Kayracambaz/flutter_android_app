@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:intl/intl.dart';
 import 'post.dart';
+import 'comment_section.dart';
 
 class PostList extends StatelessWidget {
   final List<Post> listItems;
@@ -48,6 +49,9 @@ class PostList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (listItems.isEmpty) {
+      return Center(child: Text("Hiç gönderi yok"));
+    }
     final user = FirebaseAuth.instance.currentUser;
 
     return ListView.builder(
@@ -124,6 +128,8 @@ class PostList extends StatelessWidget {
                     ),
                   ],
                 ),
+                const SizedBox(height: 8),
+                if (post.id != null) CommentSection(postId: post.id!),
               ],
             ),
           ),

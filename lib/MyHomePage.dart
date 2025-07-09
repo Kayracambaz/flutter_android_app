@@ -36,12 +36,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
       data.forEach((key, value) {
         final post = Post.fromJson(value, id: key, currentUid: uid);
+        print("PST YUKLENDI: $post");
         loadedPosts.add(post);
       });
 
       setState(() {
         posts = loadedPosts;
       });
+      print("Loaded posts: $loadedPosts");
+      print("Posts loaded: ${posts.length}");
+      print("Loaded posts: $data");
     }
   }
 
@@ -125,7 +129,13 @@ class _MyHomePageState extends State<MyHomePage> {
       )),
       body: Column(
         children: <Widget>[
-          Expanded(child: PostList(posts, onDeletePost: deletePost)),
+          Expanded(
+            child: posts.isEmpty
+                ? Center(
+                    child: Text("No posts available.",
+                        style: TextStyle(fontSize: 16)))
+                : PostList(posts, onDeletePost: deletePost),
+          ),
           TextInputWidget(addNewPost),
         ],
       ),
