@@ -22,12 +22,14 @@ class _LoginPageState extends State<LoginPage> {
 
     if (user != null) {
       Navigator.pushReplacement(
+        // ignore: use_build_context_synchronously
         context,
         MaterialPageRoute(
           builder: (context) => MyHomePage(user.displayName ?? "Guest"),
         ),
       );
     } else {
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("❌ Google sign-in failed")),
       );

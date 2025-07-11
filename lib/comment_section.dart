@@ -89,22 +89,22 @@ class _CommentSectionState extends State<CommentSection> {
               subtitle: Text(c.text),
               trailing: Text(
                 "${c.timestamp.hour}:${c.timestamp.minute.toString().padLeft(2, '0')}",
-                style: TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 12),
               ),
             )),
-        Divider(thickness: 1, height: 16),
+        const Divider(thickness: 1, height: 16),
         Row(
           children: [
             Expanded(
               child: TextField(
                 controller: commentController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: "Add a comment...",
                 ),
               ),
             ),
             IconButton(
-              icon: Icon(Icons.send),
+              icon: const Icon(Icons.send),
               onPressed: _addComment,
             )
           ],

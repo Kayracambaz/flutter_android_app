@@ -1,3 +1,4 @@
+// ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -50,7 +51,7 @@ class PostList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (listItems.isEmpty) {
-      return Center(child: Text("Hiç gönderi yok"));
+      return const Center(child: Text("There is no post"));
     }
     final user = FirebaseAuth.instance.currentUser;
 

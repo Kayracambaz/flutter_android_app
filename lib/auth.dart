@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -9,7 +11,6 @@ Future<User?> signInWithGoogle() async {
     final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 
     if (googleUser == null) {
-      print("❗ User cancelled Google sign-in.");
       return null;
     }
 
@@ -25,12 +26,9 @@ Future<User?> signInWithGoogle() async {
     final user = authResult.user;
 
     if (user == null) {
-      print("❗ Firebase returned a null user.");
       return null;
     }
 
-    print("✅ Sign-in successful!");
-    print("👤 Name: ${user.displayName}");
     print("📧 Email: ${user.email}");
     print("🆔 UID: ${user.uid}");
 

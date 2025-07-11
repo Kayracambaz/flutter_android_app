@@ -1,3 +1,6 @@
+// ignore: file_names
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -13,6 +16,7 @@ class MyHomePage extends StatefulWidget {
   const MyHomePage(this.name, {super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _MyHomePageState createState() => _MyHomePageState();
 }
 
@@ -82,6 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _handleSignOut() async {
     await signOutGoogle();
+    // ignore: use_build_context_synchronously
     Navigator.pushReplacementNamed(context, '/');
   }
 
@@ -102,7 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          DrawerHeader(
+          const DrawerHeader(
             decoration: BoxDecoration(color: Colors.blue),
             child: Text(
               'Menu',
@@ -110,16 +115,16 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.home),
-            title: Text('Home Page'),
+            leading: const Icon(Icons.home),
+            title: const Text('Home Page'),
             onTap: () {
               Navigator.pop(context);
               Navigator.pushReplacementNamed(context, '/home');
             },
           ),
           ListTile(
-            leading: Icon(Icons.person),
-            title: Text('Profile'),
+            leading: const Icon(Icons.person),
+            title: const Text('Profile'),
             onTap: () {
               Navigator.pop(context);
               Navigator.pushNamed(context, '/profile');
@@ -131,7 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
         children: <Widget>[
           Expanded(
             child: posts.isEmpty
-                ? Center(
+                ? const Center(
                     child: Text("No posts available.",
                         style: TextStyle(fontSize: 16)))
                 : PostList(posts, onDeletePost: deletePost),

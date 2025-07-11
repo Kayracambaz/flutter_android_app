@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 
 bool isEditing = false;
 
+// ignore: use_key_in_widget_constructors
 class ProfilePage extends StatefulWidget {
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -48,6 +51,7 @@ class _ProfilePageState extends State<ProfilePage> {
     });
 
     ScaffoldMessenger.of(context).showSnackBar(
+      // ignore: prefer_const_constructors
       SnackBar(content: Text('Profile saved successfully!')),
     );
   }
@@ -69,7 +73,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
       await dbRef.child(user.uid).update({'photoUrl': url});
     } catch (e) {
-      print('Photo upload error: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Photo upload failed: $e')),
       );
@@ -79,7 +82,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Profile"), actions: [
+      appBar: AppBar(title: const Text("Profile"), actions: [
         IconButton(
             icon: Icon(isEditing ? Icons.check : Icons.edit),
             onPressed: () {
@@ -108,15 +111,15 @@ class _ProfilePageState extends State<ProfilePage> {
                       : null,
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextField(
                 controller: nameController,
-                decoration: InputDecoration(labelText: "Your Name"),
+                decoration: const InputDecoration(labelText: "Your Name"),
                 enabled: isEditing,
               ),
               TextField(
                 controller: bioController,
-                decoration: InputDecoration(labelText: "About You"),
+                decoration: const InputDecoration(labelText: "About You"),
                 enabled: isEditing,
               ),
             ],
